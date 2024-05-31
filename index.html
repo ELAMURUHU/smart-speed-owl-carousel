@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owl Carousel Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <style>
+        .owl-carousel .item {
+            background: #4a90e2;
+            padding: 30px 0;
+            margin: 10px;
+            color: #FFF;
+            text-align: center;
+        }
+        .owl-carousel .owl-dots .owl-dot {
+            position: relative;
+        }
+        .owl-carousel .owl-dots .owl-dot span {
+            background-color: #ddd;
+            display: block;
+            height: 12px;
+            width: 12px;
+            margin: 5px;
+            border-radius: 50%;
+        }
+        .owl-carousel .owl-dots .owl-dot.active span {
+            background-color: #4a90e2;
+        }
+        .owl-carousel .owl-dots .owl-dot:after {
+            content: attr(data-number);
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #333;
+        }
+        #carousel-indicator {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="owl-carousel owl-theme">
+        <div class="item">Item 1</div>
+        <div class="item">Item 2</div>
+        <div class="item">Item 3</div>
+        <div class="item">Item 4</div>
+        <div class="item">Item 5</div>
+        <div class="item">Item 6</div>
+        <div class="item">Item 7</div>
+        <div class="item">Item 8</div>
+        <div class="item">Item 9</div>
+        <div class="item">Item 10</div>
+        <div class="item">Item 11</div>
+        <div class="item">Item 12</div>
+    </div>
+    <div id="carousel-indicator"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var totalItems = $('.owl-carousel .item').length;
+            var owl = $(".owl-carousel");
+
+            owl.owlCarousel({
+                items: 1, // Number of items to display at a time
+                loop: true,
+                nav: true,
+                dots: true,
+                dotData: true,
+                dotsContainer: false,
+                smartSpeed: 600, // Default speed
+                onInitialized: function(event) {
+                    updateIndicator(event);
+                },
+                onTranslated: function(event) {
+                    updateIndicator(event);
+                }
+            });
+
+            function updateIndicator(event) {
+                var currentItem = event.item.index - event.relatedTarget._clones.length / 2;
+                var currentIndex = (currentItem % totalItems + totalItems) % totalItems + 1;
+                $('#carousel-indicator').text(currentIndex + '/' + totalItems);
+            }
+
+            var startX, endX, startTime, endTime;
+
+            owl.on('mousedown touchstart', function(event) {
+                startX = event.pageX || event.originalEvent.touches[0].pageX;
+                startTime = new Date().getTime();
+            });
+
+            owl.on('mouseup touchend', function(event) {
+                endX = event.pageX || event.originalEvent.changedTouches[0].pageX;
+                endTime = new Date().getTime();
+
+                var distance = Math.abs(endX - startX);
+                var time = endTime - startTime;
+
+                if (time < 300 && distance > 50) { // Fast swipe
+                    owl.trigger('play.owl.autoplay', [100]); // Increase speed for fast swipe
+                } else {
+                    owl.trigger('play.owl.autoplay', [600]); // Default speed
+                }
+            });
+        });
+    </script>
+</body>
+</html>
