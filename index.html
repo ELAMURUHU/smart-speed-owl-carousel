@@ -37,6 +37,7 @@
     </div>
     <div id="carousel-indicator"></div>
 
+    <h2>test-17:16</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script>
@@ -79,9 +80,15 @@
                 var time = endTime - startTime;
 
                 if (time < 300 && distance > 50) { // Fast swipe
-                    owl.trigger('play.owl.autoplay', [100]); // Increase speed for fast swipe
-                    owl.trigger('stop.owl.autoplay'); // Stop autoplay to avoid interference
+                    owl.trigger('to.owl.carousel', [owl.owlCarousel('relative', owl.find('.active').index()), 100]); // Increase speed for fast swipe
+                } else {
+                    owl.trigger('to.owl.carousel', [owl.owlCarousel('relative', owl.find('.active').index()), 600]); // Default speed
                 }
+            });
+
+            // Prevent speed increase on dot click
+            $('.owl-dot').on('click', function() {
+                owl.trigger('to.owl.carousel', [$(this).index(), 600]);
             });
         });
     </script>
